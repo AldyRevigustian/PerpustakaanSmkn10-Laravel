@@ -12,7 +12,7 @@ class VisitorController extends Controller
     {
         $visitor = Visitor::orderBy('visitor_id', 'ASC')->get();;
         $member = Member::all();
-        return view('welcome', compact('visitor', 'member'));
+        return view('landing', compact('visitor', 'member'));
     }
 
     public function store(Request $request)
@@ -23,16 +23,23 @@ class VisitorController extends Controller
         $member_name = $request->member_name;
         $institution = $request->institution;
 
+        // if($request){
 
+        // }
         if ($member_id != null) {
             $cek = Member::where('member_id', $member_id)->first();
-            $visitor = Visitor::create([
-                'member_id' => $member_id,
-                'member_name' => $cek->member_name,
-                'institution' => $cek->inst_name,
-                'checkin_date' => date('Y-m-d H:i:s')
-            ]);
-        }else if($member_name != null && $institution != null){
+            if($cek){
+
+                $visitor = Visitor::create([
+                    'member_id' => $member_id,
+                    'member_name' => $cek->member_name,
+                    'institution' => $cek->inst_name,
+                    'checkin_date' => date('Y-m-d H:i:s')
+                ]);
+            
+            }
+        }
+        if($member_name != null && $institution != null){
             $visitor = Visitor::create([
                 'member_id' => null,
                 'member_name' => $member_name,
