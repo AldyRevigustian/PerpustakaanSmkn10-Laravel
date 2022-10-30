@@ -75,7 +75,7 @@
                                         <select class="choices form-select" name="member_id">                                                                                        
                                             <optgroup label="Member Name">
                                                 <option value="member" selected>Select Member</option>
-                                            @foreach ($visitor as $m)
+                                            @foreach ($member as $m)
                                                 <option value="{{$m->member_id}}">{{$m->member_name}}</option>
                                                 @endforeach
                                             </optgroup>
