@@ -1,130 +1,112 @@
 @extends('layouts.app')
 @section('content')
-    {{-- <table class="table table-bordered" style="display: flex;
-        flex-direction: column;
-        align-items: center;">
-
-           <tr>
-                <th class="col">
-                    ID
-                </th >
-                <th class="col">
-                    Member Id
-                </th>
-                <th class="col">
-                    Member Name
-                </th>
-                <th class="col">
-                    Institution
-                </th>
-                <th class="col">
-                    Created At
-                </th>
-            </tr>
-            @foreach ($visitor as $v)
-                <tr>
-
-                    <td>
-                        {{ $v->visitor_id }}
-                    </td>
-                    <td>
-                        {{ $v->member_id == null ? '-' : $v->member_id }}
-                    </td>
-                    <td>
-                        {{ $v->member_name }}
-                    </td>
-                    <td>
-                        {{ $v->institution }}
-                    </td>
-                    <td>
-                        {{ $v->checkin_date }}
-                    </td>
-                </tr>
-            @endforeach
-    </table> --}}
     <div class="col-12 col-md-4 mx-auto mt-5">
+        @if (Session::has('error'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ Session::get('error') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 
-        <div class="card shadow mt-5">
-            <div class="card-header">
+            </div>
+        @endif
+        @if (Session::has('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ Session::get('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
+        <div class="card shadow">
+            <div class="card-header mt-4">
                 <div class="text-center">
                     <span>
-                    <i class="bi bi-book-half mb-5 text-dark" style="font-size:70px;"></i>
+                        <i class="bi bi-book-half mb-5 text-dark" style="font-size:70px;"></i>
                     </span>
-                    <h4 class="text-dark mb-4 mt-1">Perpustakaan SMKN 10 Jakarta Timur</h4>
+                    <h4 class="text-dark mt-3">Perpustakaan SMKN 10 Jakarta Timur</h4>
                 </div>
             </div>
-         
-            
             <div class="card-body">
-                
                 <form action="{{ route('store') }}" method="POST">
                     @csrf
-                    
-                    <div class="row">
-                        <div class="col-12 col-md-12 mt-1">                                    
-                            <select class="form-select" id="select">
-                                <option value="member" selected disabled>Choose Type</option>
-                                <option value="member">Member</option>
-                                <option value="non">Non Member</option>
+                    <div class="col-12 col-md-12 mt-4">
+                        <select class="form-select" id="select" required>
+                            <option value="" selected disabled>Choose Type</option>
+                            <option value="member">Member</option>
+                            <option value="non">Non Member</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-12 mt-3 mb-3">
+
+                        <div id="member" hidden>
+                            <select class="choices form-select" id="select-member" name="member_id" required>
+                                <optgroup label="Member Name">
+                                    <option selected disabled>Select Member</option>
+                                    @foreach ($member as $m)
+                                        <option value="{{ $m->member_id }}">{{ $m->member_id }} | {{ $m->member_name }}
+                                        </option>
+                                    @endforeach
+                                </optgroup>
                             </select>
                         </div>
-                        <div class="col-12 col-md-12 mt-3">
-                            <div id="select-option" hidden>                                                                       
-                                <select class="choices form-select" name="member_id">                                                                                        
-                                    <optgroup label="Member Name">
-                                        <option value="member" selected>Select Member</option>
-                                    @foreach ($member as $m)
-                                        <option value="{{$m->member_id}}">{{$m->member_name}}</option>
-                                        @endforeach
-                                    </optgroup>
-                                </select>
+                        <div class="row" id="non-member" hidden>
+                            <div class="col-md-6 col-6">
+                                <input class="form-control" type="text" name="member_name" placeholder="Member Name"
+                                    required id="member-name" autocomplete="off">
+                            </div>
+                            <div class="col-md-6 col-6">
+                                <input class="form-control" type="text" name="institution" placeholder="Institution"
+                                    required id="member-institution" autocomplete="off">
                             </div>
                         </div>
-                    
-                        <div class="d-flex justify-content-between">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <input class="form-control" type="text" name="member_name" placeholder="Member Name" id="member_name" hidden autocomplete="off">
-                                </div>
-                                <div class="col-md-6">
-                                    <input class="form-control" type="text" name="institution" placeholder="Institution" hidden id="institution" autocomplete="off">
-                                </div>
-                            </div>
-                        </div>
-                    </div>                                                
-                    <div class="col-12 col-md-12 mt-3">
+                    </div>
+                    <div class="col-12 col-md-12 mt-1">
                         <button class="btn btn-dark w-100" type="submit">Submit</button>
                     </div>
-                    
+
                 </form>
 
+                <button onclick="myFunction()">Try it</button>
             </div>
         </div>
     </div>
 
-
-
-    <script type="text/javascript">
-        $('#select-id').select2({})
-    </script>
     <script>
         let select = document.getElementById('select')
         select.addEventListener('input', () => {
             console.log(select.value);
             if (select.value == 'member') {
-                document.getElementById('member_name').hidden = true
+                document.getElementById('member').hidden = false
+                document.getElementById('non-member').hidden = true
 
-                document.getElementById('select-option').hidden = false
+                document.getElementById('select-member').setAttribute('required', true);
 
-                document.getElementById('institution').hidden = true
+                document.getElementById('member-name').removeAttribute('required');
+                document.getElementById('member-institution').removeAttribute('required');
+
+                document.getElementById('member-name').value = null;
+                document.getElementById('member-institution').value = null;
             } else {
-                document.getElementById('member_name').hidden = false
+                document.getElementById('member').hidden = true
+                document.getElementById('non-member').hidden = false
 
-                document.getElementById('select-option').hidden = true
+                document.getElementById('member-name').setAttribute('required', true);
+                document.getElementById('member-institution').setAttribute('required', true);
 
-                document.getElementById('institution').hidden = false
+                document.getElementById('select-member').removeAttribute('required');
 
+                document.getElementById('select-member').selectedIndex = '0';
             }
         })
     </script>
 @endsection
+
+@push('script')
+    <script>
+        $(document).ready(function() {
+            window.setTimeout(function() {
+                $(".alert").fadeTo(300, 0).slideUp(300, function() {
+                    $(this).remove();
+                });
+            }, 4000);
+        });
+    </script>
+@endpush

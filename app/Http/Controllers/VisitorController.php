@@ -23,31 +23,29 @@ class VisitorController extends Controller
         $member_name = $request->member_name;
         $institution = $request->institution;
 
-        // if($request){
-
-        // }
         if ($member_id != null) {
             $cek = Member::where('member_id', $member_id)->first();
-            if($cek){
-
-                $visitor = Visitor::create([
-                    'member_id' => $member_id,
-                    'member_name' => $cek->member_name,
-                    'institution' => $cek->inst_name,
-                    'checkin_date' => date('Y-m-d H:i:s')
-                ]);
-            
+            $visitor = Visitor::create([
+                'member_id' => $member_id,
+                'member_name' => $cek->member_name,
+                'institution' => $cek->inst_name,
+                'checkin_date' => date('Y-m-d H:i:s')
+            ]);
+            if ($visitor) {
+                session()->flash('success', 'Selamat Datang ' . $visitor->member_name);
+                return redirect()->route('home');
             }
-        }
-        if($member_name != null && $institution != null){
+        } else if ($member_name != null && $institution != null) {
             $visitor = Visitor::create([
                 'member_id' => null,
                 'member_name' => $member_name,
                 'institution' => $institution,
                 'checkin_date' => date('Y-m-d H:i:s')
             ]);
+            if ($visitor) {
+                session()->flash('success', 'Selamat Datang ' . $visitor->member_name);
+                return redirect()->route('home');
+            }
         }
-
-        return redirect()->back();
     }
 }
