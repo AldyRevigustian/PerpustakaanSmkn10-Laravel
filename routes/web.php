@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 //     return view('welcome');
 // });
 
-Route::get('/', [VisitorController::class, 'index']);
+Route::get('/', [VisitorController::class, 'index'])->name('home');
 
 Route::post('/store', [VisitorController::class, 'store'])->name('store');
 
