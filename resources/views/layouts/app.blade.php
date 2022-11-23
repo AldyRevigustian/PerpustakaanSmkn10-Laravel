@@ -15,12 +15,28 @@
     <link rel="stylesheet" href={{ asset('assets/css/shared/iconly.css') }}>
 </head>
 
-<body
-    style="background-image: url('{{ asset('assets/images/bg/slide4.jpg') }}');height: 100%;background-position: fixed;background-repeat: no-repeat;background-size: cover;">
+<style>
+    body {
+        height: 100vh;
+        width: 100%;
+        background-image: url('{{ asset('assets/images/bg/slide4.jpg') }}');
+        background-position: fixed;
+        background-repeat: no-repeat;
+        background-size: cover;
+        display: flex;
+        align-content: center;
+        justify-content: center;
+        flex-direction: column;
+    }
 
-    <div id="app" style="margin-top: 8%">
+    .choices__inner {
+        background-color: white;
+    }
+</style>
 
-        <main class="py-4">
+<body>
+    <div id="app">
+        <main>
             @yield('content')
         </main>
     </div>
@@ -33,7 +49,6 @@
     <script src="assets/extensions/choices.js/public/assets/scripts/choices.js"></script>
     <script src="assets/js/pages/form-element-select.js"></script>
     @stack('script')
-
 </body>
 
 </html>

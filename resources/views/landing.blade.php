@@ -18,9 +18,10 @@
         <div class="card shadow">
             <div class="card-header mt-4">
                 <div class="text-center">
-                    <span>
+                    {{-- <span>
                         <i class="bi bi-book-half mb-5 text-dark" style="font-size:70px;"></i>
-                    </span>
+                    </span> --}}
+                    <img src="{{ asset('assets/images/logo/SMKN 10.jpeg') }}" alt="" height="100px" class="mb-3">
                     <h4 class="text-dark mt-3">Perpustakaan SMKN 10 Jakarta Timur</h4>
                 </div>
             </div>
@@ -29,17 +30,16 @@
                     @csrf
                     <div class="col-12 col-md-12 mt-4">
                         <select class="form-select" id="select" required>
-                            <option value="" selected disabled>Choose Type</option>
-                            <option value="member">Member</option>
+                            <option value="member" selected>Member</option>
                             <option value="non">Non Member</option>
                         </select>
                     </div>
                     <div class="col-12 col-md-12 mt-3 mb-3">
 
-                        <div id="member" hidden>
+                        <div id="member">
                             <select class="choices form-select" id="select-member" name="member_id" required>
                                 <optgroup label="Member Name">
-                                    <option selected disabled>Select Member</option>
+                                    <option value=""selected disabled>Select Member</option>
                                     @foreach ($member as $m)
                                         <option value="{{ $m->member_id }}">{{ $m->member_id }} | {{ $m->member_name }}
                                         </option>
@@ -50,11 +50,11 @@
                         <div class="row" id="non-member" hidden>
                             <div class="col-md-6 col-6">
                                 <input class="form-control" type="text" name="member_name" placeholder="Member Name"
-                                    required id="member-name" autocomplete="off">
+                                    id="member-name" autocomplete="off">
                             </div>
                             <div class="col-md-6 col-6">
                                 <input class="form-control" type="text" name="institution" placeholder="Institution"
-                                    required id="member-institution" autocomplete="off">
+                                    id="member-institution" autocomplete="off">
                             </div>
                         </div>
                     </div>
@@ -63,8 +63,6 @@
                     </div>
 
                 </form>
-
-                <button onclick="myFunction()">Try it</button>
             </div>
         </div>
     </div>
@@ -72,6 +70,7 @@
     <script>
         let select = document.getElementById('select')
         select.addEventListener('input', () => {
+
             console.log(select.value);
             if (select.value == 'member') {
                 document.getElementById('member').hidden = false
